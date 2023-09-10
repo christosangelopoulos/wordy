@@ -38,6 +38,19 @@ As mentioned above, there are **6 guesses** to find the secret word.
 
   If your distro doesn't include this installed, you can install the respective package (`wordlist`, `words`) using the respective command (`apt`, `pacman`).
 
+* **ADDITIONALLY**, if someone wishes to play the game using a different word list, they can do so, editing **LINE 17**of the `wordy.sh`
+
+```
+WORD_LIST="/usr/share/dict/words"
+
+```
+change to
+```
+WORD_LIST="/path/to/prefered/wordlist"
+
+```
+
+
 * Another, much less important dependency is [lolcat](https://github.com/busyloop/lolcat).
 
  `lolcat` helps show the *Statistics* in **color**, and therefore more fun.
