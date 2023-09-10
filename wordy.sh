@@ -56,7 +56,6 @@ function win_game ()
 function lose_game ()
 {
 	clear
-	#((TRY++))
 	echo "lose ">>$HOME/.cache/wordy/statistics.txt
 	PLACEHOLDER_STR=$SOLUTION
 	F[TRY]="GGGGG"
@@ -117,7 +116,6 @@ function enter_word () {
 	fi
 	WORD_STR="";PLACEHOLDER_STR="$WORD_STR""$PAD"
 	COMMENT_STR="$COMMENT""$PAD"
-	#get_rank
 }
 
 function main_menu_reset () {
@@ -240,7 +238,8 @@ do
 		;;
 		3) clear;show_statistics;echo -e "\nPress any key to return";read -sN 1 v;clear;
 		;;
-  4) clear;notify-send -t 5000 -i $HOME/.cache/wordy/wordy.png " Exited Wordy.";
+  4) clear;notify-send -t 5000 -i $HOME/.cache/wordy/wordy.png "🅴🆇🅸🆃🅴🅳
+🆆🅾🆁🅳🆈";
   ;;
   *)clear;echo -e "\n😕 ${Y}${bold}$db${norm} is an invalid key, please try again.\n"			;
  esac
