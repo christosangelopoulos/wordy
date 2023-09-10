@@ -100,6 +100,7 @@ Just run:
 ```
 wordy.sh
 ```
+This TUI game was inspired by [wordle](https://www.nytimes.com/games/wordle/index.html)
 
 There is another project that might interest you:
 
