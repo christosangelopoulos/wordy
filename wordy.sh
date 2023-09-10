@@ -12,7 +12,10 @@ B="\033[1;34m"
 W="\033[1;37m"
 bold=`tput bold`
 norm=`tput sgr0`
-TOTAL_SOLUTIONS="$(look . |grep -v "'"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$)"
+#LINE 17 contains the address of the word list. Each user is free to modify this line in order to play the game using the word list of their liking.
+#I KNOW I cat|grepped the word list, so what, still works, don't care!
+WORD_LIST="/usr/share/dict/words"
+TOTAL_SOLUTIONS="$(cat "$WORD_LIST"|grep -v "'"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 
 function quit_puzzle ()
 {
@@ -73,19 +76,15 @@ function check_guess ()
 	F0=('R' 'R' 'R' 'R' 'R')
 	for q in {0..4}
 	do
+		if [[ "$SOLUTION" == *"${WORD_STR:q:1}"* ]]&&[[ $(echo ${WORD_STR:q:1}) != ${SOLUTION:q:1} ]]
+		then F0[q]="Y"
+		fi
+		if [[ "$SOLUTION" == *"${WORD_STR:q:1}"* ]]&&[[ $(echo ${WORD_STR:q:1}) == ${SOLUTION:q:1} ]]&&[[ $(echo $WORD_STR|grep -o ${WORD_STR:q:1}|wc -l) -gt 1 ]]
+		then F0[q]="Y"
+		fi
 		if [[ $(echo ${WORD_STR:q:1}) == ${SOLUTION:q:1} ]]
 		then
 			F0[q]="G"
-		inplace="${WORD_STR:q:1}"
-		fi
-
-		if [[ "$SOLUTION" == *"${WORD_STR:q:1}"* ]]
-		then
-		if [[ $inplace != "${WORD_STR:q:1}" ]]
-		then F0[q]="Y"
-		elif [[ $(echo $WORD_STR|grep -o ${WORD_STR:q:1}|wc -l) -gt 1 ]]
-		then F0[q]="Y"
-		fi
 		fi
 		F[TRY]=$(echo ${F0[@]}|sed 's/ //g')
 	done
@@ -182,7 +181,7 @@ function new_game()
 	COMMENT=" Enter 5 letter word"
 	COMMENT_STR="$COMMENT"${PAD}
 	PLACEHOLDER_STR="$WORD_STR${PAD}"
-	SOLUTION="$(look . |grep -v "'"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
+	SOLUTION="$(cat "$WORD_LIST"|grep -v "'"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
 	TRY=0
 }
 
