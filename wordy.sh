@@ -12,10 +12,10 @@ B="\033[1;34m"
 W="\033[1;37m"
 bold=`tput bold`
 norm=`tput sgr0`
-#LINE 17 contains the address of the word list. Each user is free to modify this line in order to play the game using the word list of their liking.
-#I KNOW I cat|grepped the word list, so what, still works, don't care!
+#LINE 17 contains the address of the word list. .
+#Each user is free to modify this line in order to play the game using the word list of their liking.
 WORD_LIST="/usr/share/dict/words"
-TOTAL_SOLUTIONS="$(cat "$WORD_LIST"|grep -v "'"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$)"
+TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 
 function quit_puzzle ()
 {
@@ -65,7 +65,7 @@ function win_game ()
 function lose_game ()
 {
 	clear
-	echo "lose ">>$HOME/.cache/wordy/statistics.txt
+	echo "lose">>$HOME/.cache/wordy/statistics.txt
 	PLACEHOLDER_STR=$SOLUTION
 	F[TRY]="GGGGG"
 	print_box
@@ -187,7 +187,7 @@ function new_game()
 	COMMENT=" Enter 5 letter word"
 	COMMENT_STR="$COMMENT"${PAD}
 	PLACEHOLDER_STR="$WORD_STR${PAD}"
-	SOLUTION="$(cat "$WORD_LIST"|grep -v "'"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
+	SOLUTION="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
 	TRY=0
 }
 
