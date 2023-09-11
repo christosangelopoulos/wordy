@@ -34,7 +34,7 @@ PLAYED="$(cat $HOME/.cache/wordy/statistics.txt|wc -l)"
 WON="$(grep 'win' $HOME/.cache/wordy/statistics.txt|wc -l)"
 SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
 RECORD="$(sort $HOME/.cache/wordy/statistics.txt|head -1|awk '{print $1}')"
-MAX_ROW="$(uniq -c -s 1 $HOME/.cache/wordy/statistics.txt|head -1|awk '{print $1}')"
+MAX_ROW="$(uniq -c -s 1 $HOME/.cache/wordy/statistics.txt|sort -rh|head -1|awk '{print $1}')"
 echo -e "Games Played     : $PLAYED\nGames Won        : $WON\nGames Lost       : $(($PLAYED-$WON))\nSuccess ratio    : $SUC_RATIO%\nRecord Guesses   : $RECORD\nMax wins in a row: $MAX_ROW\n"|lolcat -p 3000 -a -s 40 -F 0.3
 }
 
