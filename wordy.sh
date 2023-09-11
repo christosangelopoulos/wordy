@@ -23,7 +23,7 @@ function show_letters ()
 	echo -e "          ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n  WORD:   │ ${SHOW_WORD[0]^^} ││ ${SHOW_WORD[1]^^} ││ ${SHOW_WORD[2]^^} ││ ${SHOW_WORD[3]^^} ││ ${SHOW_WORD[4]^^} │     \n          ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n"
 	RED_LETTERS="$(echo $(echo $RED_LETTERS|sed 's/ / \n/g'|sort -h))"
 	YELLOW_LETTERS="$(echo $(echo $YELLOW_LETTERS|sed 's/ / \n/g'|sort -h))"
-	echo -e "  ${Y}YELLOW LETTERS : $YELLOW_LETTERS\n  ${R}RED LETTERS : $RED_LETTERS\n  ${C}UNIDENTIFIED LETTERS : $CYAN_LETTERS${norm}\n\nPress any key to return"
+	echo -e "  ${Y}MISPLACED LETTERS : $YELLOW_LETTERS\n  ${R}ABSENT LETTERS    : $RED_LETTERS\n  ${C}UNUSED LETTERS    : $CYAN_LETTERS${norm}\n\nPress any key to return"
 	read -sN 1 v;clear;
 
 }
@@ -36,7 +36,7 @@ function quit_puzzle ()
 	echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    "
 	echo -e "\nPress any key to return"
 	read -sN 1 v;clear;
-	db2="M"
+	#db2="M"
 	}
 
 function show_statistics () {
@@ -232,19 +232,15 @@ backspace=$(cat << eof
 0000002
 eof
 )
-	while [[ $db2 != "M" ]]
+	while [[ $db2 != "Q" ]]
 	do
 		print_box
-		echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       │\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word${norm}        │\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${norm}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}L${norm}       to show ${C}${bold}LETTERS${norm}      │\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${norm}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}M${norm}       to go to ${G}${bold}MAIN MENU${norm}   │\n│      ${Y}${bold}N${norm}       to play  ${G}${bold}NEW GAME${norm}    │\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${norm}         │\n├───────────────────────────────────┤\n│${COMMENT_STR:0:35}│\n╰───────────────────────────────────╯\n"
+		echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       │\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word${norm}        │\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${norm}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}L${norm}       to show ${C}${bold}LETTERS${norm}      │\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${norm}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${norm}         │\n├───────────────────────────────────┤\n│${COMMENT_STR:0:35}│\n╰───────────────────────────────────╯\n"
 
 		read -sn 1 db2;
 		if [[ $(echo "$db2" | od) = "$backspace" ]]&&[[ ${#WORD_STR} -gt 0 ]];then  WORD_STR="${WORD_STR::-1}";PLACEHOLDER_STR="$WORD_STR""$PAD";fi;
   case $db2 in
-  		"M") clear;db="";main_menu_reset;
-  		;;
-  		"N")clear;new_game; clear;
-  		;;
-    "Q") clear;quit_puzzle;
+    "Q") clear;quit_puzzle;db="";main_menu_reset;
     ;;
     [a-z]) clear;if [[ ${#WORD_STR} -le 5 ]];then WORD_STR="$WORD_STR""$db2";PLACEHOLDER_STR="$WORD_STR""$PAD";fi;
     ;;
