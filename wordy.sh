@@ -248,7 +248,9 @@ eof
 				;;
 				"3") clear; WORD_STR="";PLACEHOLDER_STR="$WORD_STR""$PAD";
 				;;
-				"W") clear; echo -e "${Y}${bold}ALL POSSIBLE WORDS ($TOTAL_SOLUTIONS_NUMBER)${norm}\n\n$(echo $TOTAL_SOLUTIONS|sed 's/ /\n/g'|lolcat)\n\n${Y}${bold}Press any key to return${norm}";read -sN 1 v;clear;
+				"W") clear; echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮  ╭───╮╭───╮╭───╮╭───╮\n     │ W ││ O ││ R ││ D │  │ L ││ I ││ S ││ T │\n     ╰───╯╰───╯╰───╯╰───╯  ╰───╯╰───╯╰───╯╰───╯ ${norm}\n\n"
+				grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|column -x -c 80;
+				echo -e "${Y}${bold}Press any key to return${norm}";read -sN 1 v;clear;
 				;;
 				"L") clear;show_letters;
 				;;
