@@ -30,6 +30,8 @@ As mentioned above, there are **6 guesses** to find the secret word.
 
 
 ![6.png](png/6.png)
+
+![8.png](png/8.png)
 ---
 
 ### Dependencies
