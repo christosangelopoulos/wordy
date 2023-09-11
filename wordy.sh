@@ -23,7 +23,7 @@ function show_letters ()
 	echo -e "          ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n  WORD:   │ ${SHOW_WORD[0]^^} ││ ${SHOW_WORD[1]^^} ││ ${SHOW_WORD[2]^^} ││ ${SHOW_WORD[3]^^} ││ ${SHOW_WORD[4]^^} │     \n          ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n"
 	RED_LETTERS="$(echo $(echo $RED_LETTERS|sed 's/ / \n/g'|sort -h))"
 	YELLOW_LETTERS="$(echo $(echo $YELLOW_LETTERS|sed 's/ / \n/g'|sort -h))"
-	echo -e "  ${Y}YELLOW LETTERS : $YELLOW_LETTERS\n  ${R}RED LETTERS : $RED_LETTERS\n  ${C}UNADENTIFIED LETTERS : $CYAN_LETTERS${norm}\n\nPress any key to return"
+	echo -e "  ${Y}YELLOW LETTERS : $YELLOW_LETTERS\n  ${R}RED LETTERS : $RED_LETTERS\n  ${C}UNIDENTIFIED LETTERS : $CYAN_LETTERS${norm}\n\nPress any key to return"
 	read -sN 1 v;clear;
 
 }
