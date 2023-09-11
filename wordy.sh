@@ -35,7 +35,13 @@ WON="$(grep 'win' $HOME/.cache/wordy/statistics.txt|wc -l)"
 SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
 RECORD="$(sort $HOME/.cache/wordy/statistics.txt|head -1|awk '{print $1}')"
 MAX_ROW="$(uniq -c -s 1 $HOME/.cache/wordy/statistics.txt|sort -rh|head -1|awk '{print $1}')"
-echo -e "Games Played     : $PLAYED\nGames Won        : $WON\nGames Lost       : $(($PLAYED-$WON))\nSuccess ratio    : $SUC_RATIO%\nRecord Guesses   : $RECORD\nMax wins in a row: $MAX_ROW\n"|lolcat -p 3000 -a -s 40 -F 0.3
+if [[ "$(tail -1 $HOME/.cache/wordy/statistics.txt)" == "lose" ]]
+then
+CURRENT_ROW="0"
+else
+CURRENT_ROW="$(uniq -c -s 1 ~/.cache/wordy/statistics.txt |tail -1|awk '{print $1}')"
+fi
+echo -e "\tGames Played   : $PLAYED\n\tGames Won      : $WON\n\tGames Lost     : $(($PLAYED-$WON))\n\tSuccess ratio  : $SUC_RATIO%\n\tRecord Guesses : $RECORD\n\tRecord streak  : $MAX_ROW wins\n\tCurrent streak : $CURRENT_ROW wins"|lolcat -p 3000 -a -s 40 -F 0.3 -S 18
 }
 
 function win_game ()
