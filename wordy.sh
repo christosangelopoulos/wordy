@@ -70,7 +70,7 @@ function win_game ()
 	echo -e "${Y}${bold}after ${R}$TRY ${Y}tries!${norm}\n"
 	echo -e "\nPress any key to return"
 	read -sN 1 v;clear;
-	db2="M"
+	db2="Q"
 }
 
 function lose_game ()
@@ -85,7 +85,7 @@ function lose_game ()
 	A=${PLACEHOLDER_STR^^}
 echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    "
 	echo -e "\nPress any key to return";read -sN 1 v;clear;
-	db2="M"
+	db2="Q"
 }
 
 function check_guess ()
