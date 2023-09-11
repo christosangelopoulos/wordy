@@ -17,6 +17,17 @@ norm=`tput sgr0`
 WORD_LIST="/usr/share/dict/words"
 TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 
+function show_letters ()
+{
+	echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ L ││ E ││ T ││ T ││ E ││ R ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n\n"
+	echo -e "          ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n  WORD:   │ ${SHOW_WORD[0]^^} ││ ${SHOW_WORD[1]^^} ││ ${SHOW_WORD[2]^^} ││ ${SHOW_WORD[3]^^} ││ ${SHOW_WORD[4]^^} │     \n          ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n"
+	RED_LETTERS="$(echo $(echo $RED_LETTERS|sed 's/ / \n/g'|sort -h))"
+	YELLOW_LETTERS="$(echo $(echo $YELLOW_LETTERS|sed 's/ / \n/g'|sort -h))"
+	echo -e "  ${Y}YELLOW LETTERS : $YELLOW_LETTERS\n  ${R}RED LETTERS : $RED_LETTERS\n  ${C}UNADENTIFIED LETTERS : $CYAN_LETTERS${norm}\n\nPress any key to return"
+	read -sN 1 v;clear;
+
+}
+
 function quit_puzzle ()
 {
 	echo -e "     ${G}╭───╮${R}╭───╮╭───╮╭───╮╭───╮     \n     ${G}│ U │${R}│ Q ││ U ││ I ││ T │     \n     ${G}╰───╯${R}╰───╯╰───╯╰───╯╰───╯ ${norm}    \n\n"
@@ -93,8 +104,26 @@ function check_guess ()
 			F0[q]="G"
 		fi
 		F[TRY]=$(echo ${F0[@]}|sed 's/ //g')
+		#show_letters conditionals
+		g=${WORD_STR:q:1}" "
+		if [[ ${F0[q]} == "R" ]]
+		then
+			if [[ -z $(echo $RED_LETTERS|grep $g) ]];then RED_LETTERS="$RED_LETTERS""$g";fi
+			CYAN_LETTERS="${CYAN_LETTERS/$g/}"
+		fi
+		if [[ ${F0[q]} == "Y" ]]
+		then
+			if [[ -z $(echo $YELLOW_LETTERS|grep $g) ]];then YELLOW_LETTERS="$YELLOW_LETTERS""$g";fi
+			CYAN_LETTERS="${CYAN_LETTERS/$g/}"
+		fi
+		if [[ ${F0[q]} == "G" ]]
+		then
+			SHOW_WORD[q]=${WORD_STR:q:1}
+			CYAN_LETTERS="${CYAN_LETTERS/$g/}"
+			YELLOW_LETTERS="${YELLOW_LETTERS/$g/}"
+		fi
 	done
-	COMMENT=" Enter 5-letter word"
+	COMMENT=" Enter a 5-letter word"
 }
 
 function enter_word () {
@@ -189,6 +218,10 @@ function new_game()
 	PLACEHOLDER_STR="$WORD_STR${PAD}"
 	SOLUTION="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
 	TRY=0
+	CYAN_LETTERS="a b c d e f g h i j k l m n o p q r s t w v w x y z "
+	RED_LETTERS=""
+	YELLOW_LETTERS=""
+	SHOW_WORD=("_" "_" "_" "_" "_")
 }
 
 function play_menu () {
@@ -202,7 +235,7 @@ eof
 	while [[ $db2 != "M" ]]
 	do
 		print_box
-		echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       │\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word${norm}        │\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${norm}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${norm}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}M${norm}       to go to ${G}${bold}MAIN MENU${norm}   │\n│      ${Y}${bold}N${norm}       to play  ${G}${bold}NEW GAME${norm}    │\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${norm}         │\n├───────────────────────────────────┤\n│${COMMENT_STR:0:35}│\n╰───────────────────────────────────╯\n"
+		echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       │\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word${norm}        │\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${norm}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}L${norm}       to show ${C}${bold}LETTERS${norm}      │\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${norm}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}M${norm}       to go to ${G}${bold}MAIN MENU${norm}   │\n│      ${Y}${bold}N${norm}       to play  ${G}${bold}NEW GAME${norm}    │\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${norm}         │\n├───────────────────────────────────┤\n│${COMMENT_STR:0:35}│\n╰───────────────────────────────────╯\n"
 
 		read -sn 1 db2;
 		if [[ $(echo "$db2" | od) = "$backspace" ]]&&[[ ${#WORD_STR} -gt 0 ]];then  WORD_STR="${WORD_STR::-1}";PLACEHOLDER_STR="$WORD_STR""$PAD";fi;
@@ -220,6 +253,8 @@ eof
 				"3") clear; WORD_STR="";PLACEHOLDER_STR="$WORD_STR""$PAD";
 				;;
 				"W") clear; echo -e "${Y}${bold}ALL POSSIBLE WORDS ($TOTAL_SOLUTIONS_NUMBER)${norm}\n\n$(echo $TOTAL_SOLUTIONS|sed 's/ /\n/g'|lolcat)\n\n${Y}${bold}Press any key to return${norm}";read -sN 1 v;clear;
+				;;
+				"L") clear;show_letters;
 				;;
     *)clear;
   esac
