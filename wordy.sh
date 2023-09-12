@@ -218,7 +218,7 @@ function new_game()
 	PLACEHOLDER_STR="$WORD_STR${PAD}"
 	SOLUTION="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
 	TRY=0
-	CYAN_LETTERS="a b c d e f g h i j k l m n o p q r s t w v w x y z "
+	CYAN_LETTERS="a b c d e f g h i j k l m n o p q r s t u v w x y z "
 	RED_LETTERS=""
 	YELLOW_LETTERS=""
 	SHOW_WORD=("_" "_" "_" "_" "_")
