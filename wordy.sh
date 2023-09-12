@@ -21,8 +21,8 @@ function show_letters ()
 {
 	echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ L ││ E ││ T ││ T ││ E ││ R ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n\n"
 	echo -e "          ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n  WORD:   │ ${SHOW_WORD[0]^^} ││ ${SHOW_WORD[1]^^} ││ ${SHOW_WORD[2]^^} ││ ${SHOW_WORD[3]^^} ││ ${SHOW_WORD[4]^^} │     \n          ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n"
-	RED_LETTERS="$(echo $(echo $RED_LETTERS|sed 's/ / \n/g'|sort -h))"
-	YELLOW_LETTERS="$(echo $(echo $YELLOW_LETTERS|sed 's/ / \n/g'|sort -h))"
+	RED_LETTERS="$(echo $(echo $RED_LETTERS|sed 's/ / \n/g'|sort -h))"" "
+	YELLOW_LETTERS="$(echo $(echo $YELLOW_LETTERS|sed 's/ / \n/g'|sort -h))"" "
 	echo -e "  ${Y}MISPLACED LETTERS : $YELLOW_LETTERS\n  ${R}ABSENT LETTERS    : $RED_LETTERS\n  ${C}UNUSED LETTERS    : $CYAN_LETTERS${norm}\n\nPress any key to return"
 	read -sN 1 v;clear;
 
@@ -105,15 +105,15 @@ function check_guess ()
 		fi
 		F[TRY]=$(echo ${F0[@]}|sed 's/ //g')
 		#show_letters conditionals
-		g=${WORD_STR:q:1}" "
+		g="${WORD_STR:q:1}"" "
 		if [[ ${F0[q]} == "R" ]]
 		then
-			if [[ -z $(echo $RED_LETTERS|grep $g) ]];then RED_LETTERS="$RED_LETTERS""$g";fi
+			if [[ "$RED_LETTERS" != *"$g"* ]];then RED_LETTERS="$RED_LETTERS""$g";fi
 			CYAN_LETTERS="${CYAN_LETTERS/$g/}"
 		fi
 		if [[ ${F0[q]} == "Y" ]]
 		then
-			if [[ -z $(echo $YELLOW_LETTERS|grep $g) ]];then YELLOW_LETTERS="$YELLOW_LETTERS""$g";fi
+			if [[ "$YELLOW_LETTERS" != *"$g"* ]];then YELLOW_LETTERS="$YELLOW_LETTERS""$g";fi
 			CYAN_LETTERS="${CYAN_LETTERS/$g/}"
 		fi
 		if [[ ${F0[q]} == "G" ]]
