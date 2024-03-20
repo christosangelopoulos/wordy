@@ -8,7 +8,7 @@ G="\033[1;32m"
 C="\033[1;36m"
 M="\033[1;35m"
 R="\033[1;31m"
-B="\033[1;34m"
+B="\x1b[38;5;242m"
 W="\033[1;37m"
 bold=`tput bold`
 norm=`tput sgr0`
@@ -63,7 +63,7 @@ function win_game ()
  PLACEHOLDER_STR=$SOLUTION
  F[TRY]="GGGGG"
  print_box
- echo "╰───────────────────────────────────╯"
+ echo -e "${B}╰───────────────────────────────────╯${norm}"
  A=${PLACEHOLDER_STR^^}
  echo -e "${Y}${bold}Congratulations!\nYou found the word:"
  echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    "
@@ -160,7 +160,7 @@ done
 }
 
 function print_box () {
- echo "╭───────────────────────────────────╮"
+ echo -e "${B}╭───────────────────────────────────╮"
 t=0
 while [[ $t -lt $TRY ]]
 do
@@ -172,14 +172,14 @@ do
   elif [[ ${K0:a:1} == "G" ]];then K[a]="${G}";
   elif [[ ${K0:a:1} == "R" ]];then K[a]="${R}";fi
  done
-echo -e "│     ${K[0]}╭───╮${K[1]}╭───╮${K[2]}╭───╮${K[3]}╭───╮${K[4]}╭───╮${norm}     │\n│     ${K[0]}│ ${A:0:1} │${K[1]}│ ${A:1:1} │${K[2]}│ ${A:2:1} │${K[3]}│ ${A:3:1} │${K[4]}│ ${A:4:1} │${norm}     │\n│     ${K[0]}╰───╯${K[1]}╰───╯${K[2]}╰───╯${K[3]}╰───╯${K[4]}╰───╯${norm}     │"
+echo -e "${B}│     ${K[0]}╭───╮${K[1]}╭───╮${K[2]}╭───╮${K[3]}╭───╮${K[4]}╭───╮${B}     │\n│     ${K[0]}│ ${A:0:1} │${K[1]}│ ${A:1:1} │${K[2]}│ ${A:2:1} │${K[3]}│ ${A:3:1} │${K[4]}│ ${A:4:1} │     ${B}│\n│     ${K[0]}╰───╯${K[1]}╰───╯${K[2]}╰───╯${K[3]}╰───╯${K[4]}╰───╯     ${B}│"
  ((t++))
 done
 if [[ ${F[TRY]} != "GGGGG" ]]
 then
 A=${PLACEHOLDER_STR^^}
-echo -e "│     ╭───╮╭───╮╭───╮╭───╮╭───╮     │\n│     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     │\n│     ╰───╯╰───╯╰───╯╰───╯╰───╯     │"
-  echo  "├───────────────────────────────────┤"
+echo -e "${B}│     ╭───╮╭───╮╭───╮╭───╮╭───╮     │\n│     │${norm} ${A:0:1} ${B}││${norm} ${A:1:1} ${B}││${norm} ${A:2:1} ${B}││${norm} ${A:3:1} ${B}││${norm} ${A:4:1} ${B}│     │\n│     ╰───╯╰───╯╰───╯╰───╯╰───╯     │"
+  echo  -e "${B}├───────────────────────────────────┤"
 fi
 }
 
@@ -235,7 +235,7 @@ eof
  while [[ $db2 != "Q" ]]
  do
   print_box
-  echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       │\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word${norm}        │\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${norm}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}L${norm}       to show ${C}${bold}LETTERS${norm}      │\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${norm}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${norm}         │\n├───────────────────────────────────┤\n│${COMMENT_STR:0:35}│\n╰───────────────────────────────────╯\n"
+  echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       ${B}│\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word        ${B}│\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${B}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}L${norm}       to show ${C}${bold}LETTERS${B}      │\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${B}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${B}         │\n├───────────────────────────────────┤\n│${norm}${COMMENT_STR:0:35}${B}│\n╰───────────────────────────────────╯\n${norm}"
 
   read -sn 1 db2;
   if [[ $(echo "$db2" | od) = "$backspace" ]]&&[[ ${#WORD_STR} -gt 0 ]];then  WORD_STR="${WORD_STR::-1}";PLACEHOLDER_STR="$WORD_STR""$PAD";fi;
@@ -264,10 +264,10 @@ db=""
 main_menu_reset
 while [ "$db" != "4" ]
 do
- echo "╭───────────────────────────────────╮"
- echo -e "│     ${G}╭───╮${G}╭───╮${G}╭───╮${G}╭───╮${R}╭───╮     ${norm}│\n│     ${G}│ W │${G}│ O │${G}│ R │${G}│ D │${R}│ Y │     ${norm}│\n│     ${G}╰───╯${G}╰───╯${G}╰───╯${G}╰───╯${R}╰───╯     ${norm}│\n├───────────────────────────────────┤\n│   ${C}${bold}Find the hidden 5 letter word${norm}   │"
- echo -en "├───────────────────────────────────┤\n│Enter:                             │\n│ ${Y}${bold}1${norm} to ${G}${bold}Play New Game${norm}.               │\n│ ${Y}${bold}2${norm} to ${C}${bold}Read the Rules${norm}.              │\n│ ${Y}${bold}3${norm} to ${C}${bold}Show Statistics${norm}.             │\n│ ${Y}${bold}4${norm} to ${R}${bold}Exit${norm}.                        │\n"
- echo  -e "╰───────────────────────────────────╯\n"
+ echo -e "${B}╭───────────────────────────────────╮"
+ echo -e "${B}│     ${G}╭───╮${G}╭───╮${G}╭───╮${G}╭───╮${R}╭───╮     ${B}│\n│     ${G}│ W │${G}│ O │${G}│ R │${G}│ D │${R}│ Y │     ${B}│\n│     ${G}╰───╯${G}╰───╯${G}╰───╯${G}╰───╯${R}╰───╯     ${B}│\n├───────────────────────────────────┤\n│   ${C}${bold}Find the hidden 5 letter word${norm}   ${B}│"
+ echo -en "├───────────────────────────────────┤\n│${norm}Enter:                             ${B}│\n│ ${Y}${bold}1${norm} to ${G}${bold}Play New Game.${B}               │\n│ ${Y}${bold}2${norm} to ${C}${bold}Read the Rules.${B}              │\n│ ${Y}${bold}3${norm} to ${C}${bold}Show Statistics.${B}             │\n│ ${Y}${bold}4${norm} to ${R}${bold}Exit${B}.                        │\n"
+ echo  -e "╰───────────────────────────────────╯${norm}\n"
  read -sN 1  db
  case $db in
   1) clear;new_game; play_menu;clear;
