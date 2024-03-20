@@ -15,7 +15,7 @@ norm=`tput sgr0`
 #LINE 17 contains the address of the word list. .
 #Each user is free to modify this line in order to play the game using the word list of their liking.
 WORD_LIST="/usr/share/dict/words"
-TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$)"
+TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 
 function show_letters ()
 {
