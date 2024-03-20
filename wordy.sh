@@ -15,7 +15,7 @@ norm=`tput sgr0`
 #LINE 17 contains the address of the word list. .
 #Each user is free to modify this line in order to play the game using the word list of their liking.
 WORD_LIST="/usr/share/dict/words"
-TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v '[^[:lower:]]'|grep -E ^.....$)"
+TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 
 function show_letters ()
 {
@@ -216,7 +216,7 @@ function new_game()
  COMMENT=" Enter 5 letter word"
  COMMENT_STR="$COMMENT"${PAD}
  PLACEHOLDER_STR="$WORD_STR${PAD}"
- SOLUTION="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
+ SOLUTION="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$|shuf|head -1)"
  TRY=0
  CYAN_LETTERS="a b c d e f g h i j k l m n o p q r s t u v w x y z "
  RED_LETTERS=""
@@ -249,7 +249,7 @@ eof
     "3") clear; WORD_STR="";PLACEHOLDER_STR="$WORD_STR""$PAD";
     ;;
     "W") clear; echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮  ╭───╮╭───╮╭───╮╭───╮\n     │ W ││ O ││ R ││ D │  │ L ││ I ││ S ││ T │\n     ╰───╯╰───╯╰───╯╰───╯  ╰───╯╰───╯╰───╯╰───╯ ${norm}\n\n"
-    grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|column -x -c 80;
+    grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$|column -x -c 80;
     echo -e "${Y}${bold}Press any key to return${norm}";read -sN 1 v;clear;
     ;;
     "L") clear;show_letters;
