@@ -276,8 +276,8 @@ do
   ;;
   3) clear;show_statistics;echo -e "\nPress any key to return";read -sN 1 v;clear;
   ;;
-  4) clear;notify-send -t 5000 -i $HOME/.cache/wordy/wordy.png "🅴🆇🅸🆃🅴🅳
-🆆🅾🆁🅳🆈";
+  4) clear;notify-send -t 5000 -i $HOME/.cache/wordy/wordy.png "Exited
+Wordy";
   ;;
   *)clear;echo -e "\n😕 ${Y}${bold}$db${norm} is an invalid key, please try again.\n"   ;
  esac
