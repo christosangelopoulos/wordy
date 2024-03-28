@@ -3,72 +3,70 @@
 #     │ W ││ O ││ R ││ D ││ Y │
 #     ╰───╯╰───╯╰───╯╰───╯╰───╯
 #A bash script written by Christos Angelopoulos, September 2023, under GPL v2
-Y="\033[1;33m"
-G="\033[1;32m"
-C="\033[1;36m"
-M="\033[1;35m"
-R="\033[1;31m"
-B="\x1b[38;5;242m"
-W="\033[1;37m"
-bold=`tput bold`
-norm=`tput sgr0`
-#LINE 17 contains the address of the word list. .
-#Each user is free to modify this line in order to play the game using the word list of their liking.
-WORD_LIST="/usr/share/dict/words"
-TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 
 function show_letters ()
 {
- echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ L ││ E ││ T ││ T ││ E ││ R ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n\n"
- echo -e "          ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n  WORD:   │ ${SHOW_WORD[0]^^} ││ ${SHOW_WORD[1]^^} ││ ${SHOW_WORD[2]^^} ││ ${SHOW_WORD[3]^^} ││ ${SHOW_WORD[4]^^} │     \n          ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n"
+ echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ L ││ E ││ T ││ T ││ E ││ R ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    \n\n"
+ echo -e "          ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n  WORD:   │ ${SHOW_WORD[0]^^} ││ ${SHOW_WORD[1]^^} ││ ${SHOW_WORD[2]^^} ││ ${SHOW_WORD[3]^^} ││ ${SHOW_WORD[4]^^} │     \n          ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    \n"
  RED_LETTERS="$(echo $(echo $RED_LETTERS|sed 's/ / \n/g'|sort -h))"" "
  YELLOW_LETTERS="$(echo $(echo $YELLOW_LETTERS|sed 's/ / \n/g'|sort -h))"" "
- echo -e "  ${Y}MISPLACED LETTERS : $YELLOW_LETTERS\n  ${R}ABSENT LETTERS    : $RED_LETTERS\n  ${C}UNUSED LETTERS    : $CYAN_LETTERS${norm}\n\nPress any key to return"
+ echo -e "  ${Y}MISPLACED LETTERS : $YELLOW_LETTERS\n  ${R}ABSENT LETTERS    : $RED_LETTERS\n  ${C}UNUSED LETTERS    : $CYAN_LETTERS${n}\n\n${B}Press any key to return${n}"
  read -sN 1 v;clear;
 
 }
 
 function quit_puzzle ()
 {
- echo -e "     ${G}╭───╮${R}╭───╮╭───╮╭───╮╭───╮     \n     ${G}│ U │${R}│ Q ││ U ││ I ││ T │     \n     ${G}╰───╯${R}╰───╯╰───╯╰───╯╰───╯ ${norm}    \n\n"
+ echo -e "     ${G}╭───╮${R}╭───╮╭───╮╭───╮╭───╮     \n     ${G}│ U │${R}│ Q ││ U ││ I ││ T │     \n     ${G}╰───╯${R}╰───╯╰───╯╰───╯╰───╯ ${n}    \n\n"
  A=${SOLUTION^^}
- echo -e "${Y}${bold}The word you were looking for was:"
- echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    "
- echo -e "\nPress any key to return"
+ echo -e "${Y}The word you were looking for was:"
+ echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    "
+ echo -e "\n${B}Press any key to return${n}"
  read -sN 1 v;clear;
  #db2="M"
  }
 
 function show_statistics () {
- echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ S ││ T ││ A ││ T ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    \n\n"
-PLAYED="$(cat $HOME/.cache/wordy/statistics.txt|wc -l)"
-WON="$(grep 'win' $HOME/.cache/wordy/statistics.txt|wc -l)"
-SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
-RECORD="$(sort $HOME/.cache/wordy/statistics.txt|head -1|awk '{print $1}')"
-MAX_ROW="$(uniq -c -s 1 $HOME/.cache/wordy/statistics.txt|sort -rh|head -1|awk '{print $1}')"
-if [[ "$(tail -1 $HOME/.cache/wordy/statistics.txt)" == "lose" ]]
-then
-CURRENT_ROW="0"
-else
-CURRENT_ROW="$(uniq -c -s 1 ~/.cache/wordy/statistics.txt |tail -1|awk '{print $1}')"
-fi
-echo -e "\tGames Played   : $PLAYED\n\tGames Won      : $WON\n\tGames Lost     : $(($PLAYED-$WON))\n\tSuccess ratio  : $SUC_RATIO%\n\tRecord Guesses : $RECORD\n\tRecord streak  : $MAX_ROW wins\n\tCurrent streak : $CURRENT_ROW wins"|lolcat -p 3000 -a -s 40 -F 0.3 -S 18
+ echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ S ││ T ││ A ││ T ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    \n\n"
+ if [[ -f $HOME/.local/share/wordy/statistics.txt ]]&&[[ -n $(cat $HOME/.local/share/wordy/statistics.txt) ]]
+ then
+  PLAYED="$(cat $HOME/.local/share/wordy/statistics.txt|wc -l)"
+  WON="$(grep 'win' $HOME/.local/share/wordy/statistics.txt|wc -l)"
+  SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
+  RECORD="$(sort $HOME/.local/share/wordy/statistics.txt|head -1|awk '{print $1}')"
+  MAX_ROW="$(uniq -c -s 1 $HOME/.local/share/wordy/statistics.txt|sort -rh|head -1|awk '{print $1}')"
+  if [[ "$(tail -1 $HOME/.local/share/wordy/statistics.txt)" == "lose" ]]
+  then
+  CURRENT_ROW="0"
+  else
+  CURRENT_ROW="$(uniq -c -s 1 ~/.local/share/wordy/statistics.txt |tail -1|awk '{print $1}')"
+  fi
+  echo -e "${C}\tGames Played   : $PLAYED";sleep 0.3
+  echo -e "${M}\tGames Won      : $WON";sleep 0.3
+  echo -e "${G}\tGames Lost     : $(($PLAYED-$WON))";sleep 0.3
+  echo -e "${Y}\tSuccess ratio  : $SUC_RATIO%";sleep 0.3
+  echo -e "${R}\tRecord Guesses : $RECORD";sleep 0.3
+  echo -e "${W}\tRecord streak  : $MAX_ROW wins";sleep 0.3
+  echo -e "${T}\tCurrent streak : $CURRENT_ROW wins${n}";sleep 0.3
+ else
+  echo -e "${B}No statistics available at the moment."
+ fi
 }
 
 function win_game ()
 {
  clear
  ((TRY++))
- echo "$TRY win">>$HOME/.cache/wordy/statistics.txt
+ echo "$TRY win">>$HOME/.local/share/wordy/statistics.txt
  PLACEHOLDER_STR=$SOLUTION
  F[TRY]="GGGGG"
  print_box
- echo -e "${B}╰───────────────────────────────────╯${norm}"
+ echo -e "${B}╰───────────────────────────────────╯${n}"
  A=${PLACEHOLDER_STR^^}
- echo -e "${Y}${bold}Congratulations!\nYou found the word:"
- echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    "
- echo -e "${Y}${bold}after ${R}$TRY ${Y}tries!${norm}\n"
- echo -e "\nPress any key to return"
+ echo -e "${Y}Congratulations!\nYou found the word:"
+ echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    "
+ echo -e "${Y}after ${R}$TRY ${Y}tries!${n}\n"
+ echo -e "\n${B}Press any key to return${n}"
  read -sN 1 v;clear;
  db2="Q"
 }
@@ -76,15 +74,15 @@ function win_game ()
 function lose_game ()
 {
  clear
- echo "lose">>$HOME/.cache/wordy/statistics.txt
+ echo "lose">>$HOME/.local/share/wordy/statistics.txt
  PLACEHOLDER_STR=$SOLUTION
  F[TRY]="GGGGG"
  print_box
  echo "╰───────────────────────────────────╯"
- echo -e "${Y}${bold}You lost!\nAfter ${R}6${Y} tries,\n it was not possible to find the word\n"
+ echo -e "${Y}You lost!\nAfter ${R}6${Y} tries,\n it was not possible to find the word\n"
  A=${PLACEHOLDER_STR^^}
-echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${norm}    "
- echo -e "\nPress any key to return";read -sN 1 v;clear;
+echo -e "     ${G}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ ${A:0:1} ││ ${A:1:1} ││ ${A:2:1} ││ ${A:3:1} ││ ${A:4:1} │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    "
+ echo -e "\n${B}Press any key to return${n}";read -sN 1 v;clear;
  db2="Q"
 }
 
@@ -178,7 +176,7 @@ done
 if [[ ${F[TRY]} != "GGGGG" ]]
 then
 A=${PLACEHOLDER_STR^^}
-echo -e "${B}│     ╭───╮╭───╮╭───╮╭───╮╭───╮     │\n│     │${norm} ${A:0:1} ${B}││${norm} ${A:1:1} ${B}││${norm} ${A:2:1} ${B}││${norm} ${A:3:1} ${B}││${norm} ${A:4:1} ${B}│     │\n│     ╰───╯╰───╯╰───╯╰───╯╰───╯     │"
+echo -e "${B}│     ╭───╮╭───╮╭───╮╭───╮╭───╮     │\n│     │${n} ${A:0:1} ${B}││${n} ${A:1:1} ${B}││${n} ${A:2:1} ${B}││${n} ${A:3:1} ${B}││${n} ${A:4:1} ${B}│     │\n│     ╰───╯╰───╯╰───╯╰───╯╰───╯     │"
   echo  -e "${B}├───────────────────────────────────┤"
 fi
 }
@@ -188,24 +186,24 @@ function rules() {
 
 ${G}╭───╮
 ${G}│ F │
-${G}╰───╯${norm}
-If a letter appears ${R}${bold}green${norm},that means that this letter
-${G}${bold}exists in the secret word, and is in the right position${norm}.
+${G}╰───╯${n}
+If a letter appears ${R}green${n},that means that this letter
+${G}exists in the secret word, and is in the right position.${n}
 
 \t${Y}╭───╮
 \t${Y}│ F │
-\t${Y}╰───╯${norm}
-If a letter appears ${Y}${bold}yellow${norm},that means that this letter
-${Y}${bold}exists in the secret word, but is in NOT the right position${norm}.
+\t${Y}╰───╯${n}
+If a letter appears ${Y}yellow${n},that means that this letter
+${Y}exists in the secret word, but is in NOT the right position.${n}
 
 \t\t${R}╭───╮
 \t\t${R}│ F │
-\t\t${R}╰───╯${norm}
-If a letter appears ${R}${bold}red${norm},that means that this letter
-${R}${bold}does NOT appear in the secret word AT ALL${norm}.
-As mentioned above, there are ${Y}${bold}6 guesses${norm} to find the secret word.
-${Y}${bold}GOOD LUCK!${norm}
-\n\nPress any key to return"
+\t\t${R}╰───╯${n}
+If a letter appears ${R}red${n},that means that this letter
+${R}does NOT appear in the secret word AT ALL.${n}
+As mentioned above, there are ${Y}6 guesses${n} to find the secret word.
+${Y}GOOD LUCK!${n}
+\n\n${B}Press any key to return${n}"
 read -sN 1 v
 clear
 }
@@ -235,7 +233,7 @@ eof
  while [[ $db2 != "Q" ]]
  do
   print_box
-  echo -en "│   ${Y}${bold}<enter>${norm}    to ${G}${bold}ACCEPT word${norm}       ${B}│\n│  ${Y}${bold}<delete>${norm}    to ${R}${bold}ABORT word        ${B}│\n│ ${Y}${bold}<backspace>${norm}  to ${R}${bold}DELETE letter${B}     │\n├───────────────────────────────────┤\n│      ${Y}${bold}L${norm}       to show ${C}${bold}LETTERS${B}      │\n│      ${Y}${bold}W${norm}       to show ${C}${bold}WORD LIST${B}    │\n├───────────────────────────────────┤\n│      ${Y}${bold}Q${norm}       to ${R}${bold}QUIT GAME${B}         │\n├───────────────────────────────────┤\n│${norm}${COMMENT_STR:0:35}${B}│\n╰───────────────────────────────────╯\n${norm}"
+  echo -en "│   ${Y}<enter>${n}    to ${G}ACCEPT word${n}       ${B}│\n│  ${Y}<delete>${n}    to ${R}ABORT word        ${B}│\n│ ${Y}<backspace>${n}  to ${R}DELETE letter${B}     │\n├───────────────────────────────────┤\n│      ${Y}L${n}       to show ${C}LETTERS${B}      │\n│      ${Y}W${n}       to show ${C}WORD LIST${B}    │\n├───────────────────────────────────┤\n│      ${Y}Q${n}       to ${R}QUIT GAME${B}         │\n├───────────────────────────────────┤\n│${n}${COMMENT_STR:0:35}${B}│\n╰───────────────────────────────────╯\n${n}"
 
   read -sn 1 db2;
   if [[ $(echo "$db2" | od) = "$backspace" ]]&&[[ ${#WORD_STR} -gt 0 ]];then  WORD_STR="${WORD_STR::-1}";PLACEHOLDER_STR="$WORD_STR""$PAD";fi;
@@ -248,9 +246,9 @@ eof
     ;;
     "3") clear; WORD_STR="";PLACEHOLDER_STR="$WORD_STR""$PAD";
     ;;
-    "W") clear; echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮  ╭───╮╭───╮╭───╮╭───╮\n     │ W ││ O ││ R ││ D │  │ L ││ I ││ S ││ T │\n     ╰───╯╰───╯╰───╯╰───╯  ╰───╯╰───╯╰───╯╰───╯ ${norm}\n\n"
+    "W") clear; echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮  ╭───╮╭───╮╭───╮╭───╮\n     │ W ││ O ││ R ││ D │  │ L ││ I ││ S ││ T │\n     ╰───╯╰───╯╰───╯╰───╯  ╰───╯╰───╯╰───╯╰───╯ ${n}\n\n"
     grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$|column -x -c 80;
-    echo -e "${Y}${bold}Press any key to return${norm}";read -sN 1 v;clear;
+    echo -e "${B}Press any key to return${n}";read -sN 1 v;clear;
     ;;
     "L") clear;show_letters;
     ;;
@@ -258,27 +256,64 @@ eof
   esac
  done
 }
+function cursor_reappear() {
+tput cnorm
+exit
+}
+function load_config()
+{
+ WORD_LIST=$(awk '/DICTIONARY/ {print $2}' ~/.local/share/wordy/wordy.config)
+ PREFERRED_EDITOR=$(awk '/PREFERRED_EDITOR/ {print $2}' ~/.local/share/wordy/wordy.config)
+ [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"
+ [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR="nano"
+}
+
+function main_menu()
+{
+ clear
+ db=""
+ while [ "$db" != "5" ]
+ do
+  echo -e "${B}╭───────────────────────────────────╮"
+  echo -e "${B}│     ${G}╭───╮${G}╭───╮${G}╭───╮${G}╭───╮${R}╭───╮     ${B}│\n│     ${G}│ W │${G}│ O │${G}│ R │${G}│ D │${R}│ Y │     ${B}│\n│     ${G}╰───╯${G}╰───╯${G}╰───╯${G}╰───╯${R}╰───╯     ${B}│\n├───────────────────────────────────┤\n│   ${C}Find the hidden 5 letter word${n}   ${B}│"
+  echo -en "├───────────────────────────────────┤\n│${n}Enter:                             ${B}│\n│ ${Y}1${n} to ${G}Play New Game.${B}               │\n│ ${Y}2${n} to ${C}Read the Rules.${B}              │\n│ ${Y}3${n} to ${C}Show Statistics.${B}             │\n│ ${Y}4${n} to ${M}Configure Game.${B}              │\n│ ${Y}5${n} to ${R}Exit.${B}                        │\n"
+  echo  -e "╰───────────────────────────────────╯${n}\n"
+  read -sN 1  db
+  case $db in
+   1) clear;new_game; play_menu;clear;
+   ;;
+   2) clear;rules;
+   ;;
+   3) clear;show_statistics;echo -e "${B}\nPress any key to return${n}";read -sN 1 v;tput civis;clear;
+   ;;
+   4) clear;eval $PREFERRED_EDITOR ~/.local/share/wordy/wordy.config;load_config;tput civis;clear;
+   ;;
+   5) clear;notify-send -t 5000 -i $HOME/.local/share/wordy/wordy.png "Exited
+ Wordy";
+   ;;
+   *)clear;echo -e "\n😕 ${Y}$db${n} is an invalid key, please try again.\n"   ;
+  esac
+ done
+}
+function load_colors()
+{
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+T="\e[34m"
+M="\e[35m"
+C="\e[36m"
+W="\e[37m"
+B="\e[38;5;242m"
+n="\e[m"
+}
+
 #===============================================================================
-clear
-db=""
+load_colors
+load_config
+TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$)"
+trap cursor_reappear HUP INT QUIT TERM EXIT ABRT
+tput civis # make cursor invisible
+
 main_menu_reset
-while [ "$db" != "4" ]
-do
- echo -e "${B}╭───────────────────────────────────╮"
- echo -e "${B}│     ${G}╭───╮${G}╭───╮${G}╭───╮${G}╭───╮${R}╭───╮     ${B}│\n│     ${G}│ W │${G}│ O │${G}│ R │${G}│ D │${R}│ Y │     ${B}│\n│     ${G}╰───╯${G}╰───╯${G}╰───╯${G}╰───╯${R}╰───╯     ${B}│\n├───────────────────────────────────┤\n│   ${C}${bold}Find the hidden 5 letter word${norm}   ${B}│"
- echo -en "├───────────────────────────────────┤\n│${norm}Enter:                             ${B}│\n│ ${Y}${bold}1${norm} to ${G}${bold}Play New Game.${B}               │\n│ ${Y}${bold}2${norm} to ${C}${bold}Read the Rules.${B}              │\n│ ${Y}${bold}3${norm} to ${C}${bold}Show Statistics.${B}             │\n│ ${Y}${bold}4${norm} to ${R}${bold}Exit${B}.                        │\n"
- echo  -e "╰───────────────────────────────────╯${norm}\n"
- read -sN 1  db
- case $db in
-  1) clear;new_game; play_menu;clear;
-  ;;
-  2) clear;rules;
-  ;;
-  3) clear;show_statistics;echo -e "\nPress any key to return";read -sN 1 v;clear;
-  ;;
-  4) clear;notify-send -t 5000 -i $HOME/.cache/wordy/wordy.png "Exited
-Wordy";
-  ;;
-  *)clear;echo -e "\n😕 ${Y}${bold}$db${norm} is an invalid key, please try again.\n"   ;
- esac
-done
+main_menu
