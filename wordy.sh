@@ -262,10 +262,14 @@ exit
 }
 function load_config()
 {
- WORD_LIST=$(awk '/DICTIONARY/ {print $2}' ~/.local/share/wordy/wordy.config)
- PREFERRED_EDITOR=$(awk '/PREFERRED_EDITOR/ {print $2}' ~/.local/share/wordy/wordy.config)
- [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"
- [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR="nano"
+ config_fail=0
+ WORD_LIST=$(awk '/WORD_LIST/ {print $2}' ~/.config/wordy/wordy.config)
+ PREFERRED_EDITOR=$(awk '/PREFERRED_EDITOR/ {print $2}' ~/.config/wordy/wordy.config)
+ [[ -z ~/.config/wordy/wordy.config ]]&&config_fail=1
+ [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"&&config_fail=1
+ [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR="nano"&&config_fail=1
+ [[ $config_fail == 1 ]]&&notify-send -t 9000 -i $HOME/.local/share/wordy/wordy.png "Configuration file was not loaded properly.
+Wordy is running with default configuration.";
 }
 
 function main_menu()
@@ -286,10 +290,9 @@ function main_menu()
    ;;
    3) clear;show_statistics;echo -e "${B}\nPress any key to return${n}";read -sN 1 v;tput civis;clear;
    ;;
-   4) clear;eval $PREFERRED_EDITOR ~/.local/share/wordy/wordy.config;load_config;tput civis;clear;
+   4) clear;eval $PREFERRED_EDITOR ~/.config/wordy/wordy.config;load_config;tput civis;clear;
    ;;
-   5) clear;notify-send -t 5000 -i $HOME/.local/share/wordy/wordy.png "Exited
- Wordy";
+   5) clear;notify-send -t 5000 -i $HOME/.local/share/wordy/wordy.png "Exited Wordy";
    ;;
    *)clear;echo -e "\n😕 ${Y}$db${n} is an invalid key, please try again.\n"   ;
   esac
