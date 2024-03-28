@@ -80,7 +80,7 @@ While playing, the user can also check out:
 
 ## Configuring
 
-Either within the game (option `4` of main menu) or just by editing `$HOME/.local/sharewordy/wordy.config` file, the user can configure these two parameters:
+Either within the game (option `4` of main menu) or just by editing `$HOME/.local/share/wordy/wordy.config` file, the user can configure these two parameters:
 
 |n|Variable|Explanation| Acceptable Values|Default Value|
 |---|---|---|---|---|
