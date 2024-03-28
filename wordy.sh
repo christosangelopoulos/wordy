@@ -267,7 +267,7 @@ function load_config()
  PREFERRED_EDITOR=$(awk '/PREFERRED_EDITOR/ {print $2}' ~/.config/wordy/wordy.config)
  [[ -z ~/.config/wordy/wordy.config ]]&&config_fail=1
  [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"&&config_fail=1
- [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR="nano"&&config_fail=1
+ [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR=$EDITOR&&config_fail=1
  [[ $config_fail == 1 ]]&&notify-send -t 9000 -i $HOME/.local/share/wordy/wordy.png "Configuration file was not loaded properly.
 Wordy is running with default configuration.";
 }
