@@ -92,6 +92,9 @@ Either within the game (option `4` of main menu) or just by editing `$HOME/.conf
 
 ## Install
 
+**Nix (NixOS):**
+This repository is a flake. Run it using ```nix run "gitlab:christosangel/wordy"```.
+
 From a terminal window, clone the repository and change directory to `wordy/`
 
 ```
@@ -103,7 +106,6 @@ To run the script from any directory, it has to be made executable, and then cop
 ```
 chmod +x install.sh&&./install.sh
 ```
-
 
 ### Run
 
