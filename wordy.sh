@@ -263,9 +263,7 @@ exit
 function load_config()
 {
  config_fail=0
- WORD_LIST=$(awk '/WORD_LIST/ {print $2}' ~/.config/wordy/wordy.config)
- PREFERRED_EDITOR=$(awk '/PREFERRED_EDITOR/ {print $2}' ~/.config/wordy/wordy.config)
- [[ -z ~/.config/wordy/wordy.config ]]&&config_fail=1
+ [[ -z ~/.config/wordy/wordy.config ]]&&config_fail=1||source ~/.config/wordy/wordy.config
  [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"&&config_fail=1
  [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR=nano &&config_fail=1
  [[ $config_fail == 1 ]]&&notify-send -t 9000 -i $HOME/.local/share/wordy/wordy.png "Configuration file was not loaded properly.
@@ -310,13 +308,11 @@ W="\e[37m"
 B="\e[38;5;242m"
 n="\e[m"
 }
-
 #===============================================================================
 load_colors
 load_config
 TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^.....$)"
 trap cursor_reappear HUP INT QUIT TERM EXIT ABRT
 tput civis # make cursor invisible
-
 main_menu_reset
 main_menu
