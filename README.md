@@ -108,14 +108,6 @@ chmod +x install.sh&&./install.sh
 
 ---
 
-**Nix (NixOS):**
-This repository is a flake. Run it using ```nix run "gitlab:christosangel/wordy"```.
-
-
-*NixOS Supported added by* [https://gitlab.com/ilikefrogs101_dev](https://gitlab.com/ilikefrogs101_dev)
-
----
-
 ### Run
 
 Just run:
